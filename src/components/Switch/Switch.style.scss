@@ -10,7 +10,7 @@
 		height: 0;
 
 		&:checked + .slider {
-			background-color: #4993ea;
+			background-color: var(--selection-blue);
 
 			&:before {
 				transform: translateX(14px);

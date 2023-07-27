@@ -23,7 +23,10 @@ function FlightRow(props: FlightProps) {
 	};
 
 	const handleFareSelect = (fare: SubFareCategory) => {
-		navigate("/result", { state: fare.status });
+		const totalAmount = isPromoted ? fare.price.amount / 2 : fare.price.amount;
+		navigate("/result", {
+			state: { status: fare.status, totalAmount, currency: fare.price.currency },
+		});
 	};
 
 	const renderClassOptions = () => {

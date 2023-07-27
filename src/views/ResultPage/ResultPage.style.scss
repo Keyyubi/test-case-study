@@ -1,0 +1,49 @@
+.result {
+	max-width: 100%;
+
+	.summary {
+		h5 {
+			font-size: 24px;
+			font-weight: 300;
+		}
+
+		span {
+			color: var(--selection-blue);
+			font-size: 20px;
+			font-weight: 400;
+		}
+
+		button,
+		button:hover,
+		button:active {
+			background-color: var(--bg-btn-red);
+			font-size: 12px;
+			font-weight: 700;
+		}
+	}
+}
+
+@media (min-width: 576px) {
+	.result {
+		max-width: 70%;
+	}
+}
+
+// Medium devices (tablets, 768px and up)
+@media (max-width: 768px) {
+	.result {
+		max-width: 60%;
+	}
+}
+
+@media (min-width: 992px) {
+	.result {
+		max-width: 50%;
+	}
+}
+
+@media (min-width: 1200px) {
+	.result {
+		max-width: 40%;
+	}
+}
