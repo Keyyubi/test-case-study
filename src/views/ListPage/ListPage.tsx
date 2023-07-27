@@ -1,12 +1,13 @@
 import { useContext, useState } from "react";
 import "./ListPage.style.scss";
 import { AppContext } from "../../main";
-import { Flight } from "../../global/types";
+import { Flight, SubFareCategory } from "../../global/types";
 import FlightRow from "../../components/FlightRow/FlightRow";
 import Header from "../../components/Header/Header";
 
 function ListPage() {
-	const [selectedSeat, setSelectedSeat] = useState<string | null>(null);
+	const [selectedClass, setSelectedClass] = useState<string | null>(null);
+
 	const flights = useContext(AppContext)?.flights.filter(
 		(flight: Flight) =>
 			flight.originAirport.code === localStorage.getItem("origin") &&
@@ -22,13 +23,10 @@ function ListPage() {
 						key={`flight-${index}`}
 						flight={flight}
 						rowIndex={index}
-						flightClass={selectedSeat}
-						onSeatClassSelect={setSelectedSeat}
+						selectedFlightClass={selectedClass}
+						onFlightClassSelect={setSelectedClass}
 					/>
 				))}
-				{/* <div className="listed-flights">
-					<div className="list-header"></div>
-				</div> */}
 			</div>
 		</div>
 	);
