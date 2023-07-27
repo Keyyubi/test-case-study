@@ -9,12 +9,30 @@ import Switch from "../../components/Switch/Switch";
 
 type SortingOptions = "price" | "departure";
 
+const sortByPrice = (flights: Flight[]) => {
+	return flights?.sort(
+		(a: Flight, b: Flight) =>
+			a.fareCategories.ECONOMY.subcategories[0].price.amount - b.fareCategories.ECONOMY.subcategories[0].price.amount
+	);
+};
+
+const sortByDeparture = (flights: Flight[]) => {
+	return flights?.sort((a: Flight, b: Flight) => {
+		const timeA = new Date(`1970-01-01T${a.departureDateTimeDisplay}:00Z`);
+		const timeB = new Date(`1970-01-01T${b.departureDateTimeDisplay}:00Z`);
+
+		if (isNaN(timeA.getTime()) || isNaN(timeB.getTime())) {
+			return 0;
+		}
+
+		return timeA.getTime() - timeB.getTime();
+	});
+};
+
 function ListPage() {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const appData = useContext(AppContext);
-
-	// const flights = location.state;
 
 	const [selectedClass, setSelectedClass] = useState<string | null>(null);
 	const [promotion, setPromotion] = useState<boolean>(false);
@@ -36,27 +54,12 @@ function ListPage() {
 		}
 	}, []);
 
+	const flights = location.state;
+
 	const sortedFlights = useMemo(() => {
-		const flights = location.state;
-
-		if (sorting === "price")
-			return flights?.sort(
-				(a: Flight, b: Flight) =>
-					a.fareCategories.ECONOMY.subcategories[0].price.amount -
-					b.fareCategories.ECONOMY.subcategories[0].price.amount
-			);
-		else if (sorting === "departure") {
-			return flights?.sort((a: Flight, b: Flight) => {
-				const timeA = new Date(`1970-01-01T${a.departureDateTimeDisplay}:00Z`);
-				const timeB = new Date(`1970-01-01T${b.departureDateTimeDisplay}:00Z`);
-
-				if (isNaN(timeA.getTime()) || isNaN(timeB.getTime())) {
-					return 0;
-				}
-
-				return timeA.getTime() - timeB.getTime();
-			});
-		} else return flights;
+		if (sorting === "price") {
+			return sortByPrice(flights);
+		} else return sortByDeparture(flights);
 	}, [sorting]);
 
 	const handleSorting = (newOrder: SortingOptions) => {
@@ -105,6 +108,7 @@ function ListPage() {
 						rowIndex={index}
 						selectedFlightClass={selectedClass}
 						onFlightClassSelect={setSelectedClass}
+						isPromoted={promotion}
 					/>
 				))}
 			</div>

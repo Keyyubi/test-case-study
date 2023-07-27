@@ -4,19 +4,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import Checkbox from "../Checkbox/Checkbox";
 import FareBox from "../FareBox/FareBox";
+import { useNavigate } from "react-router-dom";
 
 type FlightProps = {
 	flight: Flight;
 	selectedFlightClass: string | null;
 	rowIndex: number;
+	isPromoted: boolean;
 	onFlightClassSelect: (value: string) => void;
 };
 
 function FlightRow(props: FlightProps) {
-	const { flight, selectedFlightClass, rowIndex, onFlightClassSelect } = props;
+	const { flight, isPromoted, selectedFlightClass, rowIndex, onFlightClassSelect } = props;
+	const navigate = useNavigate();
 
 	const handleFlightClassSelect = (value: string) => {
 		onFlightClassSelect(value);
+	};
+
+	const handleFareSelect = (fare: SubFareCategory) => {
+		navigate("/result", { state: fare.status });
 	};
 
 	const renderClassOptions = () => {
@@ -28,7 +35,7 @@ function FlightRow(props: FlightProps) {
 
 		return categories.map((fare) => (
 			<div key={fare.brandCode + selectedFlightClass} className="col-4 p-2">
-				<FareBox fare={fare} onSelect={() => console.log("ok")} />
+				<FareBox fare={fare} disabled={isPromoted && fare.brandCode !== "ecoFly"} onSelect={handleFareSelect} />
 			</div>
 		));
 	};
@@ -69,7 +76,9 @@ function FlightRow(props: FlightProps) {
 						<span>Yolcu Başına</span>
 						<span>
 							{flight.fareCategories.ECONOMY.subcategories[0].price.currency}{" "}
-							{flight.fareCategories.ECONOMY.subcategories[0].price.amount}
+							{isPromoted
+								? flight.fareCategories.ECONOMY.subcategories[0].price.amount / 2
+								: flight.fareCategories.ECONOMY.subcategories[0].price.amount}
 						</span>
 					</div>
 
@@ -94,7 +103,9 @@ function FlightRow(props: FlightProps) {
 						<span>Yolcu Başına</span>
 						<span>
 							{flight.fareCategories.BUSINESS.subcategories[0].price.currency}{" "}
-							{flight.fareCategories.BUSINESS.subcategories[0].price.amount}
+							{isPromoted
+								? flight.fareCategories.BUSINESS.subcategories[0].price.amount / 2
+								: flight.fareCategories.BUSINESS.subcategories[0].price.amount}
 						</span>
 					</div>
 					<div className="icon">
