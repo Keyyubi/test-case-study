@@ -4,7 +4,7 @@ import "./FareBox.style.scss";
 type FareBoxProps = {
 	fare: SubFareCategory;
 	disabled?: boolean;
-	onSelect: () => void;
+	onSelect: (fare: SubFareCategory) => void;
 };
 
 const camelCaseToSeparatedWords = (input: string) => {
@@ -20,7 +20,7 @@ function FareBox(props: FareBoxProps) {
 				<b>{camelCaseToSeparatedWords(fare.brandCode)}</b>
 				<div className="d-flex align-items-start">
 					<small>{fare.price.currency}</small>
-					<b>{fare.price.amount}</b>
+					<b>{!disabled ? fare.price.amount / 2 : fare.price.amount}</b>
 				</div>
 			</div>
 
@@ -32,7 +32,7 @@ function FareBox(props: FareBoxProps) {
 				))}
 			</div>
 
-			<button disabled={disabled} onClick={onSelect}>
+			<button disabled={disabled} onClick={() => onSelect(fare)}>
 				Uçuşu Seç
 			</button>
 		</div>

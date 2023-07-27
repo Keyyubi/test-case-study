@@ -1,15 +1,51 @@
 .listed-flights-page {
 	background-color: var(--bg-light);
+}
 
-	.listed-flights {
-		width: auto;
-		border: 1px solid var(--border-light);
-		background-color: var(--bg-md-light);
+.listed-flights {
+	width: auto;
+	border: 1px solid var(--border-light);
+	background-color: var(--bg-md-light);
 
-		.list-header {
-			border: 1px solid var(--bg-dark);
-			background-color: var(--bg-dark);
-			height: 56px;
+	.list-header {
+		border: 1px solid var(--bg-dark);
+		background-color: var(--bg-dark);
+		height: 56px;
+		padding-right: 8px;
+	}
+}
+
+.info {
+	button {
+		background-color: var(--bg-btn-red);
+		font-weight: 600;
+
+		&:hover {
+			background-color: var(--bg-btn-red);
+			filter: brightness(0.9);
 		}
+	}
+
+	.info-row {
+		font-size: 22px;
+		font-weight: 300;
+		margin-bottom: 16px;
+	}
+
+	.promotion {
+		display: flex;
+		width: auto;
+		margin-bottom: 16px;
+
+		span:not(.slider) {
+			font-size: 12px;
+			font-weight: 700;
+			margin-right: 8px;
+		}
+	}
+
+	.promotion-info {
+		font-size: 11px;
+		font-weight: 400;
 	}
 }

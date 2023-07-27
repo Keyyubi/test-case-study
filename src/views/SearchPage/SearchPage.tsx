@@ -4,38 +4,32 @@ import "./SearchPage.scss";
 import Popover from "../../components/Popover/Popover";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDays, faChevronRight, faPeopleGroup, faPerson } from "@fortawesome/free-solid-svg-icons";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import RadioGroup from "../../components/RadioGroup/RadioGroup";
 import Modal from "../../components/Modal/Modal";
 import { Airport } from "../../global/types";
-import { AppContext } from "../../main";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header/Header";
-
-type SearchPageProps = {
-	airports: Airport[];
-};
+import { AppContext } from "../../App";
 
 const errorMessages = {
 	flightNotFound: "Seçilen kriterlerde uçuş bulunamadı.",
 	searchBoxEmpty: "Lütfen kalkış/varış noktalarını seçiniz.",
 };
 
-function SearchPage(props: SearchPageProps) {
-	const { airports } = props;
+function SearchPage() {
 	const navigate = useNavigate();
 
-	const [passengers, setPassengers] = useState(1);
 	const [seatClass, setSeatClass] = useState("0");
 	const [showErrorModal, setShowErrorModal] = useState(false);
 	const [errorMsg, setErrorMsg] = useState<null | string>(null);
-	const [origin, setOrigin] = useState<null | Airport>(null);
-	const [destination, setDestination] = useState<null | Airport>(null);
 
-	const flights = useContext(AppContext)?.flights;
+	const appData = useContext(AppContext);
+	const flights = appData?.flights;
+	const airports = appData?.airports;
 
 	const onSearch = () => {
-		if (!origin || !destination) {
+		if (!appData?.origin || !appData?.destination) {
 			setErrorMsg(errorMessages.searchBoxEmpty);
 			setShowErrorModal(true);
 
@@ -43,7 +37,8 @@ function SearchPage(props: SearchPageProps) {
 		}
 
 		let filteredFlights = flights?.filter(
-			(flight) => flight.originAirport.code === origin?.id && flight.destinationAirport.code === destination?.id
+			(flight) =>
+				flight.originAirport.code === appData?.origin?.id && flight.destinationAirport.code === appData?.destination?.id
 		);
 
 		if (!filteredFlights?.length) {
@@ -52,7 +47,7 @@ function SearchPage(props: SearchPageProps) {
 
 			return;
 		} else {
-			navigate("/listed-flights");
+			navigate("/listed-flights", { state: filteredFlights });
 		}
 	};
 
@@ -63,16 +58,36 @@ function SearchPage(props: SearchPageProps) {
 	const handleSelect = (option: Airport | null, target?: "origin" | "destination") => {
 		switch (target) {
 			case "origin":
-				option ? localStorage.setItem("origin", option.id) : localStorage.removeItem("origin");
-				setOrigin(option);
+				option ? localStorage.setItem("origin", JSON.stringify(option)) : localStorage.removeItem("origin");
+				appData?.updateOrigin(option);
 				break;
 
 			case "destination":
-				option ? localStorage.setItem("destination", option.id) : localStorage.removeItem("destination");
-				setDestination(option);
+				option ? localStorage.setItem("destination", JSON.stringify(option)) : localStorage.removeItem("destination");
+				appData?.updateDestination(option);
 				break;
 		}
 	};
+
+	const handlePassengers = (amount: number) => {
+		let current = appData?.passengers || 1;
+		if (amount > 0) {
+			current++;
+		} else {
+			if (current > 1) current--;
+		}
+
+		localStorage.setItem("passengers", String(current));
+		appData?.updatePassengers(current);
+	};
+
+	useEffect(() => {
+		const storedPassenger = localStorage.getItem("passengers");
+
+		if (storedPassenger !== null) {
+			appData?.updatePassengers(Number(storedPassenger));
+		}
+	}, []);
 
 	const popoverContent = (
 		<div className="container">
@@ -92,14 +107,11 @@ function SearchPage(props: SearchPageProps) {
 				<div className="col-6 d-flex align-items-center">Yolcu</div>
 				<div className="col-4">
 					<div className="row">
-						<button
-							className="col btn btn-sm btn-secondary"
-							disabled={passengers < 1}
-							onClick={() => passengers > 1 && setPassengers(passengers - 1)}>
+						<button className="col btn btn-sm btn-secondary" onClick={() => handlePassengers(-1)}>
 							-
 						</button>
-						<div className="col d-flex justify-content-center align-items-center">{passengers}</div>
-						<button className="col btn btn-sm btn-secondary" onClick={() => setPassengers(passengers + 1)}>
+						<div className="col d-flex justify-content-center align-items-center">{appData?.passengers}</div>
+						<button className="col btn btn-sm btn-secondary" onClick={() => handlePassengers(1)}>
 							+
 						</button>
 					</div>
@@ -148,9 +160,13 @@ function SearchPage(props: SearchPageProps) {
 							content={popoverContent}
 							trigger={
 								<div className="popover-trigger">
-									<span style={{ color: "#fff" }}>{passengers}</span>
+									<span style={{ color: "#fff" }}>{appData?.passengers}</span>
 									<div className="icon">
-										<FontAwesomeIcon color="#9a97a5" size="lg" icon={passengers > 1 ? faPeopleGroup : faPerson} />
+										<FontAwesomeIcon
+											color="#9a97a5"
+											size="lg"
+											icon={appData && appData.passengers > 1 ? faPeopleGroup : faPerson}
+										/>
 									</div>
 								</div>
 							}

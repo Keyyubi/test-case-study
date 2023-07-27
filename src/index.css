@@ -25,6 +25,7 @@
 	--font-light: #fff;
 	--font-gray: #888;
 	--box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.05);
+	--selection-blue: #4993ea;
 }
 
 body {

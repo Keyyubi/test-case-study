@@ -1,42 +1,46 @@
-import { Flight } from "../../global/types";
+import { Flight, SubFareCategory } from "../../global/types";
 import "./FlightRow.style.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import Checkbox from "../Checkbox/Checkbox";
-import FareBox from "../SeatClassBox/FareBox";
+import FareBox from "../FareBox/FareBox";
+import { useNavigate } from "react-router-dom";
 
 type FlightProps = {
 	flight: Flight;
-	flightClass: string | null;
+	selectedFlightClass: string | null;
 	rowIndex: number;
-	onSeatClassSelect: (value: string) => void;
+	isPromoted: boolean;
+	onFlightClassSelect: (value: string) => void;
 };
 
 function FlightRow(props: FlightProps) {
-	const { flight, flightClass, rowIndex, onSeatClassSelect } = props;
+	const { flight, isPromoted, selectedFlightClass, rowIndex, onFlightClassSelect } = props;
+	const navigate = useNavigate();
 
-	const getAvailableSeatClasses = () => {
-		const fareClass = flightClass?.split("-")[0];
-		const categories =
-			fareClass === "economy"
-				? flight.fareCategories.ECONOMY.subcategories
-				: flight.fareCategories.BUSINESS.subcategories;
-
-		return (
-			<div className="col-lg-12 my-2">
-				<div className="col-wrapper d-flex p-2">
-					{categories.map((fare) => (
-						<div key={fare.brandCode + fareClass} className="col-4 p-2">
-							<FareBox fare={fare} onSelect={() => console.log("ok")} />
-						</div>
-					))}
-				</div>
-			</div>
-		);
+	const handleFlightClassSelect = (value: string) => {
+		onFlightClassSelect(value);
 	};
 
-	const handleSeatClassSelect = (value: string) => {
-		onSeatClassSelect(value);
+	const handleFareSelect = (fare: SubFareCategory) => {
+		const totalAmount = isPromoted ? fare.price.amount / 2 : fare.price.amount;
+		navigate("/result", {
+			state: { status: fare.status, totalAmount, currency: fare.price.currency },
+		});
+	};
+
+	const renderClassOptions = () => {
+		let categories: SubFareCategory[];
+
+		if (selectedFlightClass === `economy-${rowIndex}`) categories = flight.fareCategories.ECONOMY.subcategories;
+		else if (selectedFlightClass === `business-${rowIndex}`) categories = flight.fareCategories.BUSINESS.subcategories;
+		else categories = [];
+
+		return categories.map((fare) => (
+			<div key={fare.brandCode + selectedFlightClass} className="col-4 p-2">
+				<FareBox fare={fare} disabled={isPromoted && fare.brandCode !== "ecoFly"} onSelect={handleFareSelect} />
+			</div>
+		));
 	};
 
 	return (
@@ -63,25 +67,27 @@ function FlightRow(props: FlightProps) {
 				</div>
 			</div>
 
-			<div className="col-lg-3 col-sm-12 col-md-12" onClick={() => handleSeatClassSelect(`economy-${rowIndex}`)}>
-				<div className="col-wrapper  seat-class p-2">
+			<div className="col-lg-3 col-sm-12 col-md-12" onClick={() => handleFlightClassSelect(`economy-${rowIndex}`)}>
+				<div className="col-wrapper flight-class p-2">
 					<Checkbox
 						label="ECONOMY"
-						checked={flightClass === `economy-${rowIndex}`}
-						onCheck={() => handleSeatClassSelect(`economy-${rowIndex}`)}
+						checked={selectedFlightClass === `economy-${rowIndex}`}
+						onCheck={() => handleFlightClassSelect(`economy-${rowIndex}`)}
 					/>
 
 					<div className="d-flex flex-column justify-content-center">
 						<span>Yolcu Başına</span>
 						<span>
 							{flight.fareCategories.ECONOMY.subcategories[0].price.currency}{" "}
-							{flight.fareCategories.ECONOMY.subcategories[0].price.amount}
+							{isPromoted
+								? flight.fareCategories.ECONOMY.subcategories[0].price.amount / 2
+								: flight.fareCategories.ECONOMY.subcategories[0].price.amount}
 						</span>
 					</div>
 
 					<div className="">
 						<FontAwesomeIcon
-							icon={flightClass === `economy-${rowIndex}` ? faChevronUp : faChevronDown}
+							icon={selectedFlightClass === `economy-${rowIndex}` ? faChevronUp : faChevronDown}
 							size="sm"
 							color="#9a97a5"
 						/>
@@ -89,23 +95,25 @@ function FlightRow(props: FlightProps) {
 				</div>
 			</div>
 
-			<div className="col-lg-3 col-sm-12 col-md-12" onClick={() => handleSeatClassSelect(`business-${rowIndex}`)}>
-				<div className="col-wrapper  seat-class p-2">
+			<div className="col-lg-3 col-sm-12 col-md-12" onClick={() => handleFlightClassSelect(`business-${rowIndex}`)}>
+				<div className="col-wrapper flight-class p-2">
 					<Checkbox
 						label="BUSINESS"
-						checked={flightClass === `business-${rowIndex}`}
-						onCheck={() => handleSeatClassSelect(`business-${rowIndex}`)}
+						checked={selectedFlightClass === `business-${rowIndex}`}
+						onCheck={() => handleFlightClassSelect(`business-${rowIndex}`)}
 					/>
 					<div className="d-flex flex-column justify-content-center">
 						<span>Yolcu Başına</span>
 						<span>
 							{flight.fareCategories.BUSINESS.subcategories[0].price.currency}{" "}
-							{flight.fareCategories.BUSINESS.subcategories[0].price.amount}
+							{isPromoted
+								? flight.fareCategories.BUSINESS.subcategories[0].price.amount / 2
+								: flight.fareCategories.BUSINESS.subcategories[0].price.amount}
 						</span>
 					</div>
 					<div className="icon">
 						<FontAwesomeIcon
-							icon={flightClass === `business-${rowIndex}` ? faChevronUp : faChevronDown}
+							icon={selectedFlightClass === `business-${rowIndex}` ? faChevronUp : faChevronDown}
 							size="sm"
 							color="#9a97a5"
 						/>
@@ -113,7 +121,7 @@ function FlightRow(props: FlightProps) {
 				</div>
 			</div>
 
-			{flightClass && getAvailableSeatClasses()}
+			{renderClassOptions()}
 		</div>
 	);
 }
