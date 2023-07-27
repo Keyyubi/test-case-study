@@ -7,7 +7,7 @@ import { faClose, faPlaneArrival, faPlaneDeparture } from "@fortawesome/free-sol
 import { Airport } from "../../global/types";
 
 type SearchBoxProps = {
-	options: Airport[];
+	options?: Airport[];
 	placeholder: string;
 	task: "origin" | "destination";
 	onSelect: (option: Airport | null, target?: "origin" | "destination") => void;
@@ -31,24 +31,23 @@ function SearchBox(props: SearchBoxProps) {
 
 	const clearSearch = () => {
 		setSearch("");
-		localStorage.removeItem("origin");
-		localStorage.removeItem("destination");
-		onSelect(null);
+		onSelect(null, task);
 	};
 
 	useEffect(() => {
 		const storedOption = localStorage.getItem(task);
 
 		if (storedOption !== null) {
-			const option = options.filter((option) => option.id === storedOption)[0];
+			const option = JSON.parse(storedOption) as Airport;
 			setSearch(option.title);
 			onSelect(option, task);
 		}
 	}, []);
 
-	const filteredOptions = options.filter((option: Airport) =>
-		option.title.toLocaleLowerCase("tr").includes(search.toLocaleLowerCase("tr"))
-	);
+	const filteredOptions =
+		options?.filter((option: Airport) =>
+			option.title.toLocaleLowerCase("tr").includes(search.toLocaleLowerCase("tr"))
+		) || [];
 
 	return (
 		<div className="search-box">

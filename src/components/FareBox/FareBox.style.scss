@@ -34,6 +34,11 @@
 		border-radius: 0;
 		background-color: var(--bg-btn-red);
 		width: 100%;
+		transition: filter 0.3s;
+
+		&:hover {
+			filter: brightness(0.9);
+		}
 
 		&:disabled {
 			background-color: var(--bg-btn-disabled);

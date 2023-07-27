@@ -1,30 +1,17 @@
-import React, { createContext } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SearchPage from "./views/SearchPage/SearchPage.tsx";
-import { Airport, Flight } from "./global/types.tsx";
-import MockData from "../flights.json";
 import ListPage from "./views/ListPage/ListPage.tsx";
 import ResultPage from "./views/ResultPage/ResultPage.tsx";
-
-interface SharedData {
-	flights: Flight[];
-	selectedOrigin?: Airport;
-	selectedDestination?: Airport;
-}
-
-export const AppContext = createContext<null | SharedData>(null);
-
-const sharedData: SharedData = {
-	flights: MockData.flights,
-};
+import App from "./App.tsx";
 
 const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <SearchPage airports={MockData.airports} />,
+		element: <SearchPage />,
 	},
 	{
 		path: "/listed-flights",
@@ -38,8 +25,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
 	<React.StrictMode>
-		<AppContext.Provider value={sharedData}>
+		<App>
 			<RouterProvider router={router} />
-		</AppContext.Provider>
+		</App>
 	</React.StrictMode>
 );

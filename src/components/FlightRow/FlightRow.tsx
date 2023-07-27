@@ -3,7 +3,7 @@ import "./FlightRow.style.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import Checkbox from "../Checkbox/Checkbox";
-import FareBox from "../SeatClassBox/FareBox";
+import FareBox from "../FareBox/FareBox";
 
 type FlightProps = {
 	flight: Flight;
@@ -20,13 +20,13 @@ function FlightRow(props: FlightProps) {
 	};
 
 	const renderClassOptions = () => {
-		let cats: SubFareCategory[];
+		let categories: SubFareCategory[];
 
-		if (selectedFlightClass === `economy-${rowIndex}`) cats = flight.fareCategories.ECONOMY.subcategories;
-		else if (selectedFlightClass === `business-${rowIndex}`) cats = flight.fareCategories.BUSINESS.subcategories;
-		else cats = [];
+		if (selectedFlightClass === `economy-${rowIndex}`) categories = flight.fareCategories.ECONOMY.subcategories;
+		else if (selectedFlightClass === `business-${rowIndex}`) categories = flight.fareCategories.BUSINESS.subcategories;
+		else categories = [];
 
-		return cats.map((fare) => (
+		return categories.map((fare) => (
 			<div key={fare.brandCode + selectedFlightClass} className="col-4 p-2">
 				<FareBox fare={fare} onSelect={() => console.log("ok")} />
 			</div>
