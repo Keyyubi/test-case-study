@@ -1,0 +1,104 @@
+.flight-row {
+	margin: 10px 0;
+	display: flex;
+	justify-content: center;
+
+	.col-wrapper {
+		box-shadow: var(--box-shadow);
+		background-color: var(--bg-light);
+	}
+
+	.legs {
+		width: 84%;
+		display: flex;
+		justify-content: space-around;
+
+		.origin,
+		.destination {
+			width: 10%;
+			height: 54px;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: flex-start;
+			padding: 0;
+
+			.time,
+			.code,
+			.city {
+				font-size: 14px;
+				font-weight: 600;
+			}
+			.code,
+			.city {
+				color: var(--font-gray);
+				font-size: 12px;
+			}
+			.city {
+				font-size: 10px;
+			}
+		}
+
+		.destination {
+			align-items: flex-end;
+		}
+
+		.line {
+			width: 80%;
+			margin: auto 0;
+			height: 1px;
+			background-color: var(--icon-dark);
+		}
+	}
+
+	.flight-info {
+		width: 16%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+
+		.title {
+			font-size: 10px;
+			font-weight: 600;
+			color: var(--font-gray);
+		}
+		.time {
+			font-size: 12px;
+		}
+	}
+
+	.seat-class {
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		label {
+			font-size: 9px;
+			font-weight: 800;
+			color: var(--font-gray);
+			text-decoration: underline;
+		}
+		span {
+			min-width: 100px;
+			&:first-child {
+				font-size: 8px;
+				font-weight: 600;
+				color: var(--font-gray);
+			}
+			&:last-child {
+				font-size: 16px;
+				font-weight: 600;
+			}
+		}
+	}
+}
+
+.seat-classes {
+	box-shadow: var(--box-shadow);
+
+	background-color: var(--bg-light);
+	margin: 0 4px;
+	width: auto;
+}

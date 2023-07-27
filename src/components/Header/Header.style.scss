@@ -1,0 +1,34 @@
+.header-light,
+.header-dark {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	width: 100%;
+	height: 30px;
+	margin-bottom: 20px;
+	padding-top: 10px;
+}
+
+.header-light {
+	color: #1f1f1f;
+	border-bottom: 1px solid #1f1f1f;
+
+	span,
+	a,
+	a:visited {
+		color: #1f1f1f;
+		text-decoration: none;
+	}
+}
+
+.header-dark {
+	color: #fff;
+	border-bottom: 1px solid #fff;
+
+	span,
+	a,
+	a:visited {
+		color: #fff;
+		text-decoration: none;
+	}
+}

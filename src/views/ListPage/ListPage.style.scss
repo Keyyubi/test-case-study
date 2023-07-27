@@ -1,0 +1,15 @@
+.listed-flights-page {
+	background-color: var(--bg-light);
+
+	.listed-flights {
+		width: auto;
+		border: 1px solid var(--border-light);
+		background-color: var(--bg-md-light);
+
+		.list-header {
+			border: 1px solid var(--bg-dark);
+			background-color: var(--bg-dark);
+			height: 56px;
+		}
+	}
+}

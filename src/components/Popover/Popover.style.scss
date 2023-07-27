@@ -1,0 +1,28 @@
+.popover {
+	color: var(--font-dark);
+	box-sizing: border-box;
+	position: absolute;
+	background-color: var(--bg-light);
+	box-shadow: var(--box-shadow);
+	padding: 8px;
+	z-index: 100;
+
+	top: 100%;
+	transform: translateX(-50%);
+}
+
+.popover-arrow {
+	margin-top: 10px;
+
+	&::before {
+		content: "";
+		position: absolute;
+		width: 0;
+		height: 0;
+		border: 8px solid transparent;
+		border-bottom-color: var(--bg-light);
+		bottom: 100%;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+}

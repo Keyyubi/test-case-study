@@ -1,0 +1,42 @@
+.seat-box-wrapper {
+	width: 100%;
+	background-color: var(--bg-md-light);
+
+	.header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		padding: 8px;
+
+		small {
+			font-size: xx-small;
+		}
+	}
+
+	.content {
+		background-color: var(--bg-light);
+		border: 1px solid var(--border-light);
+		min-height: 240px;
+
+		.content-item {
+			padding: 8px;
+			border-bottom: 1px solid var(--border-light);
+		}
+	}
+
+	button {
+		outline: none;
+		border: none;
+		padding: 8px;
+		color: var(--font-light);
+		font-weight: 600;
+		font-size: 18px;
+		border-radius: 0;
+		background-color: var(--bg-btn-red);
+		width: 100%;
+
+		&:disabled {
+			background-color: var(--bg-btn-disabled);
+		}
+	}
+}
