@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import { createContext, useState } from "react";
 import { Airport, Flight } from "./global/types";
 import MockData from "../flights.json";
 
