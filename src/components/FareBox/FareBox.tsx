@@ -20,7 +20,7 @@ function FareBox(props: FareBoxProps) {
 				<b>{camelCaseToSeparatedWords(fare.brandCode)}</b>
 				<div className="d-flex align-items-start">
 					<small>{fare.price.currency}</small>
-					<b>{!disabled ? fare.price.amount / 2 : fare.price.amount}</b>
+					<b>{fare.price.amount}</b>
 				</div>
 			</div>
 
