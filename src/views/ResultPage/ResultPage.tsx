@@ -15,13 +15,19 @@ function ResultPage() {
 			<div className="container result mt-3">
 				<div className="row">
 					<div className="col d-flex align-items-center">
-						<FontAwesomeIcon icon={status ? faCheckCircle : faCircleXmark} color={status ? "green" : "red"} size="2x" />
-						<b style={{ marginLeft: "16px" }}>Kabin seçiminiz {status ? "tamamlandı" : "tamamlanamadı"}.</b>
+						<FontAwesomeIcon
+							icon={status === "AVAILABLE" ? faCheckCircle : faCircleXmark}
+							color={status === "AVAILABLE" ? "green" : "red"}
+							size="2x"
+						/>
+						<b style={{ marginLeft: "16px" }}>
+							Kabin seçiminiz {status === "AVAILABLE" ? "tamamlandı" : "tamamlanamadı"}.
+						</b>
 					</div>
 				</div>
 				<hr />
 				<div className="row summary">
-					{status ? (
+					{status === "AVAILABLE" ? (
 						<div className="col d-flex justify-content-between align-items-center">
 							<h5>Toplam Tutar</h5>
 							<span>{currency + " " + totalAmount}</span>
