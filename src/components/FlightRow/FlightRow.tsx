@@ -36,6 +36,17 @@ function FlightRow(props: FlightProps) {
 		else if (selectedFlightClass === `business-${rowIndex}`) categories = flight.fareCategories.BUSINESS.subcategories;
 		else categories = [];
 
+		if (isPromoted)
+			categories = categories.map((category) => {
+				return {
+					...category,
+					price: {
+						currency: category.price.currency,
+						amount: category.price.amount / 2,
+					},
+				};
+			});
+
 		return categories.map((fare) => (
 			<div key={fare.brandCode + selectedFlightClass} className="col-4 p-2">
 				<FareBox fare={fare} disabled={isPromoted && fare.brandCode !== "ecoFly"} onSelect={handleFareSelect} />

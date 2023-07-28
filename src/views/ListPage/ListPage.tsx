@@ -65,6 +65,7 @@ function ListPage() {
 	const handleSorting = (newOrder: SortingOptions) => {
 		localStorage.setItem("sorting", newOrder);
 		setSorting(newOrder);
+		setSelectedClass(null);
 	};
 
 	return (
